@@ -4,6 +4,6 @@ const { Home, register } = require('../controllers/auth-controller'); // Ensure 
 
 // Define routes with callback functions
 router.route('/').get(Home);
-router.route('/register').get(register);
+router.route('/register').post(register);
 
 module.exports = router;
