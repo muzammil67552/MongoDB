@@ -1,4 +1,5 @@
 const User = require('../models/user-models');
+const bcrypt = require('bcryptjs')
 
 const Home = async (req, res) => {
     try {
@@ -21,6 +22,8 @@ const register = async (req, res) => {
         if (userExist) {
             return res.status(400).json("User Already Exist");
         }
+        // const saltRound = 10;                                          // u can also do it in controller below the userschema
+        // const hash_password = await bcrypt.hash(password, saltRound)
 
         // Create new user and store result in a variable
         const newUser = await User.create({ username, email, phone, password });
