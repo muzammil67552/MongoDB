@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-
+import Register from './Register'
 
 const Home = () => {
   return (
@@ -68,6 +68,7 @@ const Home = () => {
         </div>
       </main>
     </section>
+    <Register/>
     </div>
   );
 };
