@@ -1,108 +1,152 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Contact = () => {
-    const [formData, setFormData] = useState({
+const Register = () => {
+    const [user, setUser] = useState({
         username: "",
         email: "",
-        message: "",
+        phone: "",
+        password: "",
     });
 
     const handleInput = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        const { name, value } = e.target;
+        setUser((prevUser) => ({ ...prevUser, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        console.log("Registering user:", user);
+
+        try {
+            const response = await fetch("http://localhost:9000/api/auth/register", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            });
+            
+            if (response.ok) {
+                console.log("User registered successfully:", await response.json());
+                navigate("/")
+                // Handle successful registration (e.g., navigate to login, show success message)
+                
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to register:", errorData);
+            }
+        } catch (error) {
+            console.error("Registration error:", error);
+        }
     };
 
     return (
-        <>
-            <section className="bg-gray-50 py-10 flex items-center justify-center min-h-screen">
-                <main className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                        
-                        {/* Map Section */}
-                        <div className="flex justify-center md:justify-end h-full">
-                            <div className="mapswrapper">
-                                <iframe
-                                    width="600"
-                                    height="450"
-                                    loading="lazy"
-                                    allowFullScreen
-                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=Fareed%20Colony%20Orangi%20Town%20Karachi&zoom=10&maptype=roadmap"
-                                ></iframe>
-                            </div>
-                        </div>
-
-                        {/* Contact Form Section */}
-                        <div className="p-6 rounded-lg shadow-lg bg-white h-full flex flex-col justify-center">
-                            <h1 className="text-2xl font-bold mb-6 text-center">Contact Us Now</h1>
-
-                            <form className="space-y-5" onSubmit={handleSubmit}>
-                                {/* Username Field */}
-                                <div>
-                                    <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        placeholder="Enter Your Name"
-                                        id="username"
-                                        autoComplete="off"
-                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        onChange={handleInput}
-                                        value={formData.username}
-                                    />
-                                </div>
-
-                                {/* Email Field */}
-                                <div>
-                                    <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        placeholder="Enter Your Email"
-                                        id="email"
-                                        autoComplete="off"
-                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        onChange={handleInput}
-                                        value={formData.email}
-                                    />
-                                </div>
-
-                                {/* Message Field */}
-                                <div>
-                                    <label htmlFor="message" className="block text-gray-700 mb-2">Message</label>
-                                    <textarea
-                                        name="message"
-                                        id="message"
-                                        placeholder="Your Message"
-                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        rows="5"
-                                        onChange={handleInput}
-                                        value={formData.message}
-                                    ></textarea>
-                                </div>
-
-                                {/* Submit Button */}
-                                <div className="mt-6">
-                                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                        Send Message
-                                    </button>
-                                </div>
-                            </form>
+        <section className="bg-gray-50 py-10 flex items-center justify-center min-h-screen">
+            <main className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+                    
+                    {/* Map section */}
+                    <div className="p-6 rounded-lg shadow-lg h-full flex flex-col justify-center">
+                        <div className="mapswrapper w-full h-full flex justify-center">
+                            <img
+                                width="100%"
+                                height="100%"
+                                src="/img4.jpg"
+                                alt="Map"
+                            />
                         </div>
                     </div>
-                </main>
-            </section>
-        </>
+
+                    {/* Contact Form Section */}
+                    <div className="p-6 rounded-lg shadow-lg bg-white h-full flex flex-col justify-center">
+                        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up Now</h1>
+
+                        <form className="space-y-5" onSubmit={handleSubmit}>
+                            
+                            {/* Username Field */}
+                            <div>
+                                <label htmlFor="username" className="block text-gray-700 mb-2">Username</label>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    id="username"
+                                    placeholder="Enter Your Name"
+                                    autoComplete="off"
+                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onChange={handleInput}
+                                    value={user.username}
+                                />
+                            </div>
+
+                            {/* Email Field */}
+                            <div>
+                                <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder="Enter Your Email"
+                                    autoComplete="off"
+                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onChange={handleInput}
+                                    value={user.email}
+                                />
+                            </div>
+
+                            {/* Phone Field */}
+                            <div>
+                                <label htmlFor="phone" className="block text-gray-700 mb-2">Phone</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    id="phone"
+                                    placeholder="Enter Your Phone Number"
+                                    autoComplete="off"
+                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onChange={handleInput}
+                                    value={user.phone}
+                                />
+                            </div>
+
+                            {/* Password Field */}
+                            <div>
+                                <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    placeholder="Enter Your Password"
+                                    autoComplete="off"
+                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onChange={handleInput}
+                                    value={user.password}
+                                />
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="mt-6">
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                >
+                                    Sign Up Now
+                                </button>
+                            </div>
+
+                            {/* Link to SignIn */}
+                            <p className="text-center">
+                                Already have an account?
+                                <Link to="/login">
+                                    <span className="p-2 text-xl text-blue-500">Sign In</span>
+                                </Link>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </section>
     );
 };
 
-export default Contact;
+export default Register;

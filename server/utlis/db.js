@@ -8,7 +8,7 @@ const URI = process.env.MONGO;
 const connectDB = async () =>{
     try {
         await mongoose.connect(URI);
-        console.log("Connected Successfully to DB/mern_admin")
+        console.log("Connected Successfully to DB/mern-from")
 
     } catch (error) {
         console.log("Connection Failed");

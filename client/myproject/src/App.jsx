@@ -4,8 +4,9 @@ import Footer from './components/Footer';
 import Home from './pages/Home';  // Assuming you have a Home page component
 import About from './pages/About'; // Assuming you have an About page component
 import Contact from './pages/Contact'; // Assuming you have a Contact page component
-import Register from './pages/Register'; // Assuming you have a Register page component
+import Register from './pages/Register';
 import Login from './pages/Login'; // Assuming you have a Login page component
+import Error from './pages/Error';
 import './App.css';
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Error />} />
+
         </Routes>
         
         <Footer />  {/* Footer outside Routes to display on all pages */}

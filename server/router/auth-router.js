@@ -5,6 +5,6 @@ const { Home, register, login } = require('../controllers/auth-controller'); // 
 // Define routes with callback functions
 router.route('/').get(Home);
 router.route('/register').post(register);
-router.route('/login').post(register);    // for posting the data from user method will be post and define route
+router.route('/login').post(login);    // for posting the data from user method will be post and define route
 
 module.exports = router;
