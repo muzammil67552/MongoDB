@@ -14,45 +14,43 @@ const Home = async (req, res) => {
 // Register Route
 const register = async (req, res) => {
     try {
-        console.log(req.body); // Check request body content
         const { username, email, phone, password } = req.body;
-      
-        // Await the findOne call
+
         const userExist = await User.findOne({ email });
-
         if (userExist) {
-            return res.status(400).json("User Already Exist");
+            return res.status(400).json({ message: "User Already Exists" });
         }
-    
-        // Create new user and store result in a variable
-        const newUser = await User.create({ username, email, phone, password });
 
-        // Send back the new user's data as response
-        res.status(200).json({ data: newUser });
+        const newUser = await User.create({ username, email, phone, password });
+        
+        // Generate token for the new user
+        const token = newUser.generateToken();
+
+        res.status(200).json({
+            message: "User Token are",
+            token: token,
+            userid: newUser._id.toString()
+        });
     } catch (error) {
         console.log(error);
-        res.status(404).send({ message: "Page Not Found" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
 };
-
 // Login Route
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-      
-        // Find user by email
+
         const userExist = await User.findOne({ email });
         
         if (!userExist) {
             return res.status(400).json({ message: "Invalid Credentials" });
         }
-      
-        // Compare provided password with the stored hashed password
+
         const isUser = await bcrypt.compare(password, userExist.password);
         
         if (isUser) {
-            // Assuming `generateToken` is a method on the `User` schema for creating tokens
-            const token = await userExist.generateToken();
+            const token = userExist.generateToken(); // Generate token using method
 
             res.status(200).json({
                 message: "Login Successfully",
@@ -66,7 +64,5 @@ const login = async (req, res) => {
         console.log(error);
         res.status(500).send("Internal Server Error");
     }
-};
-
-// Export all functions
+};// Export all functions
 module.exports = { Home, register, login };

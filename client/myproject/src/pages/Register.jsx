@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+
+
 const Register = () => {
     const [user, setUser] = useState({
         username: "",
@@ -26,10 +28,12 @@ const Register = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user),
             });
+        
             
             if (response.ok) {
                 console.log("User registered successfully:", await response.json());
-                navigate("/")
+                navigate("/login")
+               
                 // Handle successful registration (e.g., navigate to login, show success message)
                 
             } else {

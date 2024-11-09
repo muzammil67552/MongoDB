@@ -1,26 +1,47 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [user, setUser] = useState({
         email: "",
         password: "",
     });
+    const navigate = useNavigate();
 
-  const handleInput = (e) =>{
-     let name = e.target.name;
-     let value = e.target.value
- 
-  setUser({
-      ...user,
-      [name] : value
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+        setUser({
+            ...user,
+            [name]: value,
+        });
+    };
 
-  })
-}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Login user:", user);
 
-    const handleSubmit = (e) =>{
-        e.preventDefault(),
-        console.log(user)
-    }
+        try {
+            const response = await fetch("http://localhost:9000/api/auth/login", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            });
+            
+            if (response.ok) {
+                console.log("User registered successfully:", await response.json());
+                alert("SuccessFully Login")
+                navigate("/")
+               
+                
+            } else {
+                const errorData = await response.json();
+                alert("Invalid Credentials")
+                console.error("Failed to Login :", errorData);
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+        }
+    };
 
     return (
         <>
@@ -30,9 +51,9 @@ const Login = () => {
                         
                         {/* Image Section with Hover Effect */}
                         <div className="flex justify-center md:justify-end h-full">
-                            <img 
-                                src="/login.jpg" 
-                                alt="Register" 
+                            <img
+                                src="/login.jpg"
+                                alt="Register"
                                 className="w-full max-w-sm h-full rounded-md shadow-md object-cover transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
                             />
                         </div>
